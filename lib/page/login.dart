@@ -9,6 +9,38 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  void _login() {
+    String email = _emailController.text;
+    String password = _passwordController.text;
+
+    // Mock login logic
+    if (email == 'user@example.com' && password == 'password') {
+      // Successful login
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const HomePage()),
+      );
+    } else {
+      // Invalid credentials
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Invalid Credentials'),
+          content: const Text('Please enter valid email and password.'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,10 +48,10 @@ class _LoginFormState extends State<LoginForm> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back), // Icon cho nút back
           onPressed: () {
-            Navigator.of(context).pop(); // Đóng màn hình hiện tại khi nút back được nhấn
+            Navigator.of(context)
+                .pop(); // Đóng màn hình hiện tại khi nút back được nhấn
           },
         ),
-  
       ),
       body: Padding(
         padding: const EdgeInsets.all(50.0),
@@ -35,6 +67,7 @@ class _LoginFormState extends State<LoginForm> {
             ),
             const SizedBox(height: 20.0),
             TextFormField(
+              controller: _emailController,
               decoration: const InputDecoration(
                 labelText: 'Email',
                 labelStyle: TextStyle(
@@ -54,6 +87,7 @@ class _LoginFormState extends State<LoginForm> {
             ),
             const SizedBox(height: 20.0),
             TextFormField(
+              controller: _passwordController,
               decoration: const InputDecoration(
                 labelText: 'Password',
                 labelStyle: TextStyle(
@@ -74,9 +108,8 @@ class _LoginFormState extends State<LoginForm> {
             ),
             const SizedBox(height: 20.0),
             ElevatedButton(
-              onPressed: () {
-                // Login Event here
-              },
+              // Modify the onPressed callback
+              onPressed: _login,
               child: const Text('Login'),
             ),
           ],
@@ -86,3 +119,18 @@ class _LoginFormState extends State<LoginForm> {
   }
 }
 
+class HomePage extends StatelessWidget {
+  const HomePage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Home'),
+      ),
+      body: const Center(
+        child: Text('Welcome to the Home Page!'),
+      ),
+    );
+  }
+}

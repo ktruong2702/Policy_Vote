@@ -10,9 +10,9 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-  bool _checkvalue_1 = false;
-  bool _checkvalue_2 = false;
-  bool _checkvalue_3 = false;
+  final bool _checkvalue_1 = false;
+  final bool _checkvalue_2 = false;
+  final bool _checkvalue_3 = false;
 
   final int _gender = 0;
   final _nameController = TextEditingController();

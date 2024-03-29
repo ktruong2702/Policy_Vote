@@ -1,6 +1,5 @@
 import 'package:bai3/page/defulatwidget.dart';
 import 'package:bai3/page/login.dart';
-import 'package:bai3/page/splashscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:bai3/page/polls.dart';
 
@@ -24,9 +23,9 @@ class _MainpageState extends State<Mainpage> {
       case 0:
         return const PollPage();
       case 1:
-        return DefaultWidget(title: "Register");
+        return const DefaultWidget(title: "Register");
       default:
-        return DefaultWidget(title: "None");
+        return const DefaultWidget(title: "None");
     }
   }
 

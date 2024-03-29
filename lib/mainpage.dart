@@ -22,30 +22,12 @@ class _MainpageState extends State<Mainpage> {
     var nameWidgets = "SplashScreen";
     switch (index) {
       case 0:
-        {
-          return const PollPage();
-        }
+        return const PollPage();
       case 1:
-        nameWidgets = "Info";
-        break;
-      case 2:
-        nameWidgets = "Info";
-        break;
-      case 3:
-        {
-          nameWidgets = "Info";
-          break;
-        }
-
-      case 4:
-        {
-          return const SplashScreen();
-        }
+        return DefaultWidget(title: "Register");
       default:
-        nameWidgets = "None";
-        break;
+        return DefaultWidget(title: "None");
     }
-    return DefaultWidget(title: nameWidgets);
   }
 
   @override

@@ -4,7 +4,6 @@ import 'package:bai3/page/login.dart';
 import 'package:bai3/page/splashscreen.dart';
 import 'package:flutter/material.dart';
 import 'page/Voter/register.dart';
-import 'page/Voter/contact.dart';
 import 'package:bai3/page/polls.dart';
 
 class Mainpage extends StatefulWidget {
@@ -122,8 +121,9 @@ class _MainpageState extends State<Mainpage> {
             leading: const Icon(Icons.exit_to_app),
             title: const Text('logout'),
             onTap: () {
-              Navigator.push(context ,   
-              MaterialPageRoute(builder: (context) => const LoginForm()),
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const LoginForm()),
               );
             },
           ),

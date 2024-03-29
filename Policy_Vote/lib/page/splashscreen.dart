@@ -23,7 +23,6 @@ class SplashScreen extends StatelessWidget {
             ElevatedButton(
               onPressed: () {
                 // Xử lý khi nút đăng nhập được nhấn
-                  // Navigator để điều hướng tới trang RegisterPage
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const LoginForm()),

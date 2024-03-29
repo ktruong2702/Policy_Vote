@@ -86,26 +86,8 @@ class _MainpageState extends State<Mainpage> {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.contact_mail),
-            title: const Text('Contact'),
-            onTap: () {
-              Navigator.pop(context);
-              _selectedIndex = 1;
-              setState(() {});
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.supervised_user_circle),
-            title: const Text('Info'),
-            onTap: () {
-              Navigator.pop(context);
-              _selectedIndex = 2;
-              setState(() {});
-            },
-          ),
-          ListTile(
             leading: const Icon(Icons.person),
-            title: const Text('register'),
+            title: const Text('Register'),
             onTap: () {
               Navigator.pop(context);
               _selectedIndex = 3;
@@ -117,7 +99,7 @@ class _MainpageState extends State<Mainpage> {
           ),
           ListTile(
             leading: const Icon(Icons.exit_to_app),
-            title: const Text('logout'),
+            title: const Text('Logout'),
             onTap: () {
               Navigator.push(
                 context,
@@ -132,14 +114,6 @@ class _MainpageState extends State<Mainpage> {
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.contact_mail),
-            label: 'contact',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.supervised_user_circle),
-            label: 'Info',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),

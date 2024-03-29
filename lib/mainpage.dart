@@ -1,9 +1,7 @@
-import 'package:bai3/page/createPoll.dart';
 import 'package:bai3/page/defulatwidget.dart';
 import 'package:bai3/page/login.dart';
 import 'package:bai3/page/splashscreen.dart';
 import 'package:flutter/material.dart';
-import 'page/Voter/register.dart';
 import 'package:bai3/page/polls.dart';
 
 class Mainpage extends StatefulWidget {

@@ -1,4 +1,3 @@
-import 'package:bai3/mainpage.dart';
 import 'package:flutter/material.dart';
 import 'package:bai3/page/splashscreen.dart';
 void main() {

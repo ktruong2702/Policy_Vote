@@ -1,0 +1,12 @@
+com.example.bai3.app-jetified-annotation-experimental-1.1.0-0 C:\Users\giaan\.gradle\caches\transforms-3\09db32a73384ac2dccccf916d7dc0262\transformed\jetified-annotation-experimental-1.1.0\res
+com.example.bai3.app-core-1.6.0-1 C:\Users\giaan\.gradle\caches\transforms-3\168e459aae59caaab0d2c703cf9d67ab\transformed\core-1.6.0\res
+com.example.bai3.app-jetified-window-1.0.0-beta04-2 C:\Users\giaan\.gradle\caches\transforms-3\29fe38a5fd6c3bf46cd8e59c2b63489e\transformed\jetified-window-1.0.0-beta04\res
+com.example.bai3.app-jetified-window-java-1.0.0-beta04-3 C:\Users\giaan\.gradle\caches\transforms-3\978180320ed1d29d66a82edc9d24751e\transformed\jetified-window-java-1.0.0-beta04\res
+com.example.bai3.app-debug-4 D:\HocTap\Flutter\bai3\android\app\src\debug\res
+com.example.bai3.app-main-5 D:\HocTap\Flutter\bai3\android\app\src\main\res
+com.example.bai3.app-pngs-6 D:\HocTap\Flutter\bai3\build\app\generated\res\pngs\debug
+com.example.bai3.app-resValues-7 D:\HocTap\Flutter\bai3\build\app\generated\res\resValues\debug
+com.example.bai3.app-rs-8 D:\HocTap\Flutter\bai3\build\app\generated\res\rs\debug
+com.example.bai3.app-mergeDebugResources-9 D:\HocTap\Flutter\bai3\build\app\intermediates\incremental\debug\mergeDebugResources\merged.dir
+com.example.bai3.app-mergeDebugResources-10 D:\HocTap\Flutter\bai3\build\app\intermediates\incremental\debug\mergeDebugResources\stripped.dir
+com.example.bai3.app-merged_res-11 D:\HocTap\Flutter\bai3\build\app\intermediates\merged_res\debug

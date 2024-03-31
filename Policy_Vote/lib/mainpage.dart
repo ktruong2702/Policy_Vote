@@ -1,11 +1,16 @@
+import 'package:bai3/model/user.dart';
 import 'package:bai3/page/createPoll.dart';
 import 'package:bai3/page/defulatwidget.dart';
 import 'package:bai3/page/login.dart';
+import 'package:bai3/page/recentPoll.dart';
+import 'package:bai3/page/resultPoll.dart';
 import 'package:bai3/page/splashscreen.dart';
 import 'package:flutter/material.dart';
 import 'page/Voter/register.dart';
 import 'page/Voter/contact.dart';
 import 'package:bai3/page/polls.dart';
+import 'package:bai3/page/Detail.dart';
+import 'package:bai3/model/user.dart';
 
 class Mainpage extends StatefulWidget {
   const Mainpage({super.key});
@@ -15,6 +20,8 @@ class Mainpage extends StatefulWidget {
 
 class _MainpageState extends State<Mainpage> {
   int _selectedIndex = 0;
+  String selectedQuestion = "";
+  User user = User();
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -26,20 +33,20 @@ class _MainpageState extends State<Mainpage> {
     switch (index) {
       case 0:
         {
-          return const PollPage();
+          return const AnswerResultPage();
         }
       case 1:
-        nameWidgets = "Info";
-        break;
+        {
+          return const PollPage();
+        }
       case 2:
-        nameWidgets = "Info";
-        break;
+        {
+          return const RecentPollPage();
+        }
       case 3:
         {
-          nameWidgets = "Info";
-          break;
+          return Detail(user: user);
         }
-
       case 4:
         {
           return const SplashScreen();
@@ -122,8 +129,9 @@ class _MainpageState extends State<Mainpage> {
             leading: const Icon(Icons.exit_to_app),
             title: const Text('logout'),
             onTap: () {
-              Navigator.push(context ,   
-              MaterialPageRoute(builder: (context) => const LoginForm()),
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const LoginForm()),
               );
             },
           ),

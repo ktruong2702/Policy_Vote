@@ -129,26 +129,37 @@ class _RecentPollPage extends State<RecentPollPage> {
   }
 }
 
-class QuizPage extends StatelessWidget {
+class QuizPage extends StatefulWidget {
   final String selectedQuestion;
 
   const QuizPage(this.selectedQuestion, {Key? key}) : super(key: key);
 
   @override
+  _QuizPageState createState() => _QuizPageState();
+}
+
+class _QuizPageState extends State<QuizPage> {
+  List<String> _selectedOptions = [];
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(selectedQuestion),
+        title: Text(widget.selectedQuestion),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('Bạn đã chọn câu hỏi: $selectedQuestion'),
+            Text('You choose the question is: ${widget.selectedQuestion}'),
+            const SizedBox(height: 20),
+            Column(
+              children: _buildOptions(),
+            ),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                // Bắt đầu làm bài thi với câu hỏi đã chọn
+                // Bắt đầu làm bài thi với câu hỏi đã chọn và các câu trả lời được chọn
               },
               child: const Text('Vote'),
             ),
@@ -156,5 +167,24 @@ class QuizPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  List<Widget> _buildOptions() {
+    return [
+      for (int i = 0; i < 4; i++)
+        CheckboxListTile(
+          title: Text('The answer ${i + 1}'),
+          value: _selectedOptions.contains('The answer ${i + 1}'),
+          onChanged: (value) {
+            setState(() {
+              if (value!) {
+                _selectedOptions.add('The answer ${i + 1}');
+              } else {
+                _selectedOptions.remove('The answer ${i + 1}');
+              }
+            });
+          },
+        ),
+    ];
   }
 }

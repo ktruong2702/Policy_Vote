@@ -22,8 +22,7 @@ class SplashScreen extends StatelessWidget {
             const Text("Welcom to Policy Vote"),
             ElevatedButton(
               onPressed: () {
-                // Xử lý khi nút đăng nhập được nhấn
-                  // Navigator để điều hướng tới trang RegisterPage
+              
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const LoginForm()),

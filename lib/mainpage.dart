@@ -1,7 +1,14 @@
+import 'package:bai3/model/user.dart';
+import 'package:bai3/page/createPoll.dart';
 import 'package:bai3/page/defulatwidget.dart';
 import 'package:bai3/page/login.dart';
+import 'package:bai3/page/recentPoll.dart';
+import 'package:bai3/page/resultPoll.dart';
+import 'package:bai3/page/splashscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:bai3/page/polls.dart';
+import 'package:bai3/page/Detail.dart';
+import 'package:bai3/model/user.dart';
 
 class Mainpage extends StatefulWidget {
   const Mainpage({super.key});
@@ -11,6 +18,8 @@ class Mainpage extends StatefulWidget {
 
 class _MainpageState extends State<Mainpage> {
   int _selectedIndex = 0;
+  String selectedQuestion = "";
+  User user = User();
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -21,9 +30,25 @@ class _MainpageState extends State<Mainpage> {
     var nameWidgets = "SplashScreen";
     switch (index) {
       case 0:
-        return const PollPage();
+        {
+          return const AnswerResultPage();
+        }
       case 1:
-        return const DefaultWidget(title: "Register");
+        {
+          return const PollPage();
+        }
+      case 2:
+        {
+          return const RecentPollPage();
+        }
+      case 3:
+        {
+          return Detail(user: user);
+        }
+      case 4:
+        {
+          return const SplashScreen();
+        }
       default:
         return const DefaultWidget(title: "None");
     }

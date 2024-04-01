@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:bai3/page/recentPoll.dart';
-import 'package:bai3/page/createPoll.dart';
+
+import 'package:bai3/services/api_service.dart';
+
 class PollPage extends StatefulWidget {
   const PollPage({super.key});
 
@@ -11,6 +12,25 @@ class PollPage extends StatefulWidget {
 
 class _QuizSelectionPageState extends State<PollPage> {
   String? selectedQuestion;
+  List<dynamic> _questions = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchQuestions();
+  }
+
+  Future<void> _fetchQuestions() async {
+    try {
+      List<dynamic> questions = await fetchQuestions();
+      setState(() {
+        _questions = questions;
+      });
+    } catch (e) {
+      // Handle the error
+      print('Error: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,11 +50,10 @@ class _QuizSelectionPageState extends State<PollPage> {
           SliverPadding(
             padding: const EdgeInsets.all(10.0),
             sliver: SliverList(
-              delegate: SliverChildListDelegate(
-                [
-                  const SizedBox(height: 20.0),
-                  // Nội dung của bạn ở đây
-                  Card(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  final question = _questions[index];
+                  return Card(
                     shape: RoundedRectangleBorder(
                       side: const BorderSide(
                         color: Colors.black,
@@ -45,9 +64,9 @@ class _QuizSelectionPageState extends State<PollPage> {
                     child: ListTile(
                       leading: const FlutterLogo(size: 60.0),
                       title: Text(
-                        'Poll 1',
+                        question['text'],
                         style: TextStyle(
-                          color: selectedQuestion == 'Question 1'
+                          color: selectedQuestion == question['id'].toString()
                               ? Colors.black
                               : Colors.grey,
                           fontWeight: FontWeight.bold,
@@ -55,10 +74,10 @@ class _QuizSelectionPageState extends State<PollPage> {
                       ),
                       onTap: () {
                         setState(() {
-                          selectedQuestion = 'Question 1';
+                          selectedQuestion = question['id'].toString();
                         });
                       },
-                      selected: selectedQuestion == 'Question 1',
+                      selected: selectedQuestion == question['id'].toString(),
                       subtitle: const Text(
                         'A sufficiently long subtitle warrants three lines.',
                       ),
@@ -67,70 +86,9 @@ class _QuizSelectionPageState extends State<PollPage> {
                       tileColor: const Color.fromARGB(255, 252, 251, 251),
                       textColor: const Color.fromARGB(236, 0, 0, 0),
                     ),
-                  ),
-                          const SizedBox(height: 10,),
-                  Card(
-                    shape: RoundedRectangleBorder(
-                      side: const BorderSide(
-                        color: Colors.black,
-                        width: 3.0,
-                      ),
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
-                    child: ListTile(
-                      leading: const FlutterLogo(size: 60.0),
-                      title: Text(
-                        'Poll 2',
-                        style: TextStyle(
-                          color: selectedQuestion == 'Question 2'
-                              ? Colors.black
-                              : Colors.grey,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      onTap: () {
-                        setState(() {
-                          selectedQuestion = 'Question 2';
-                        });
-                      },
-                      selected: selectedQuestion == 'Question 2',
-                      subtitle: const Text(
-                        'A sufficiently long subtitle warrants three lines.',
-                      ),
-                      trailing: const Icon(Icons.more_vert),
-                      isThreeLine: true,
-                      tileColor: const Color.fromARGB(255, 252, 251, 251),
-                      textColor: const Color.fromARGB(236, 0, 0, 0),
-                    ),
-                  ),
-                  // Thêm nút chuyển hướng đến trang RecentPollsPage
-                    const SizedBox(height: 16,),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const RecentPollPage(),
-                        ),
-                      );
-                    },
-                    child: const Text('See All'),
-                  ),
-
-                     // Thêm nút tạo câu hỏi
-                  const SizedBox(height: 16,),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const CreatePollPage(),
-                        ),
-                      );
-                    },
-                    child: const Text('Create Question'),
-                  ),
-                ],
+                  );
+                },
+                childCount: _questions.length,
               ),
             ),
           ),
@@ -216,6 +174,3 @@ class _QuizPageState extends State<QuizPage> {
     ];
   }
 }
-
-
-

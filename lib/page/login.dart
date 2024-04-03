@@ -132,7 +132,7 @@ class HomePage extends StatelessWidget {
       ),
       body: Center(
         child: StreamBuilder(
-          stream: FirebaseFirestore.instance.collection('polls').snapshots(),
+          stream: FirebaseFirestore.instance.collection('polls').orderBy('title').snapshots(),
           builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return CircularProgressIndicator();
@@ -141,18 +141,18 @@ class HomePage extends StatelessWidget {
               return Text('Error: ${snapshot.error}');
             }
             return ListView(
-              children: snapshot.data!.docs.map((DocumentSnapshot document) {
-                Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+              children: snapshot.data!.docs.map((DocumentSnapshot pollDocument) {
+                Map<String, dynamic> pollData = pollDocument.data() as Map<String, dynamic>;
+                String? pollId = pollDocument.id; // Assuming poll ID is needed
+
                 return ListTile(
-                  title: Text(data['title']),
-                  subtitle: Text(data['description']),
+                  title: Text(pollData['title']),
+                  subtitle: Text(pollData['description']),
                   onTap: () {
-                    // Navigate to a new screen or perform an action
-                    // You can pass along the question data here
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => QuestionDetailsPage(data: data),
+                        builder: (context) => QuestionListPage(pollId: pollId),
                       ),
                     );
                   },
@@ -166,34 +166,38 @@ class HomePage extends StatelessWidget {
   }
 }
 
-class QuestionDetailsPage extends StatelessWidget {
-  final Map<String, dynamic> data;
+class QuestionListPage extends StatelessWidget {
+  final String? pollId;
 
-  const QuestionDetailsPage({Key? key, required this.data}) : super(key: key);
+  const QuestionListPage({Key? key, this.pollId}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(data['title']),
+        title: Text('Questions for Poll $pollId'),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Question: ${data['title']}',
-              style: TextStyle(fontSize: 24),
-            ),
-            SizedBox(height: 20),
-            Text(
-              'Description: ${data['description']}',
-              style: TextStyle(fontSize: 18),
-            ),
-            // Add more widgets here to display other fields if needed
-          ],
-        ),
+      body: StreamBuilder(
+        stream: FirebaseFirestore.instance.collection('questions').where('poll_id', isEqualTo: pollId).snapshots(),
+        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator();
+          }
+          if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
+          }
+          return ListView(
+            children: snapshot.data!.docs.map((DocumentSnapshot questionDocument) {
+              Map<String, dynamic> questionData = questionDocument.data() as Map<String, dynamic>;
+              return ListTile(
+                title: Text(questionData['question_txt']),
+                // Add more widgets here to display other question details if needed
+              );
+            }).toList(),
+          );
+        },
       ),
     );
   }
 }
+

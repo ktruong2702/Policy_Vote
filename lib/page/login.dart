@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 
 class LoginForm extends StatefulWidget {
   const LoginForm({Key? key}) : super(key: key);
@@ -128,9 +130,74 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Home'),
       ),
-      body: const Center(
-        child: Text('Welcome to the Home Page!'),
+      body: Center(
+        child: StreamBuilder(
+          stream: FirebaseFirestore.instance.collection('polls').orderBy('title').snapshots(),
+          builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return CircularProgressIndicator();
+            }
+            if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            }
+            return ListView(
+              children: snapshot.data!.docs.map((DocumentSnapshot pollDocument) {
+                Map<String, dynamic> pollData = pollDocument.data() as Map<String, dynamic>;
+                String? pollId = pollDocument.id; // Assuming poll ID is needed
+
+                return ListTile(
+                  title: Text(pollData['title']),
+                  subtitle: Text(pollData['description']),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => QuestionListPage(pollId: pollId),
+                      ),
+                    );
+                  },
+                );
+              }).toList(),
+            );
+          },
+        ),
       ),
     );
   }
 }
+
+class QuestionListPage extends StatelessWidget {
+  final String? pollId;
+
+  const QuestionListPage({Key? key, this.pollId}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Questions for Poll $pollId'),
+      ),
+      body: StreamBuilder(
+        stream: FirebaseFirestore.instance.collection('questions').where('poll_id', isEqualTo: pollId).snapshots(),
+        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator();
+          }
+          if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
+          }
+          return ListView(
+            children: snapshot.data!.docs.map((DocumentSnapshot questionDocument) {
+              Map<String, dynamic> questionData = questionDocument.data() as Map<String, dynamic>;
+              return ListTile(
+                title: Text(questionData['question_txt']),
+                // Add more widgets here to display other question details if needed
+              );
+            }).toList(),
+          );
+        },
+      ),
+    );
+  }
+}
+

@@ -11,24 +11,18 @@ class HomePage extends StatelessWidget {
         automaticallyImplyLeading: false, // Ẩn nút quay về
         centerTitle: true, // Căn giữa tiêu đề
         title: const Text(
-          'Home',
+          'Polls',
           style: TextStyle(
             color: Colors.white, // Màu chữ
             fontSize: 20.0, // Cỡ chữ
             fontWeight: FontWeight.bold, // Độ đậm
           ),
         ),
-        backgroundColor: Colors.blueAccent, // Màu nền
+        backgroundColor: Color.fromARGB(230, 68, 71, 245), // Màu nền
         elevation: 0, // Bỏ bóng đổ
       ),
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Color.fromARGB(255, 48, 173, 100), Colors.blue],
-          ),
-        ),
+        color: Colors.white,
         child: Center(
           child: StreamBuilder(
             stream: FirebaseFirestore.instance

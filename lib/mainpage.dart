@@ -1,6 +1,7 @@
 import 'package:bai3/model/user.dart';
 import 'package:bai3/page/createPoll.dart';
 import 'package:bai3/page/defulatwidget.dart';
+import 'package:bai3/page/home.dart';
 import 'package:bai3/page/login.dart';
 import 'package:bai3/page/recentPoll.dart';
 import 'package:bai3/page/resultPoll.dart';
@@ -27,15 +28,15 @@ class _MainpageState extends State<Mainpage> {
   }
 
   _loadWidget(int index) {
-    var nameWidgets = "SplashScreen";
     switch (index) {
       case 0:
         {
-          return const AnswerResultPage();
+          return  PollHomePage();
         }
+
       case 1:
         {
-          return const PollPage();
+          return const HomePage();
         }
       case 2:
         {
@@ -45,10 +46,7 @@ class _MainpageState extends State<Mainpage> {
         {
           return Detail(user: user);
         }
-      case 4:
-        {
-          return const SplashScreen();
-        }
+
       default:
         return const DefaultWidget(title: "None");
     }
@@ -57,81 +55,33 @@ class _MainpageState extends State<Mainpage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      drawer: Drawer(
-          child: ListView(
-        padding: EdgeInsets.zero,
-        children: [
-          const DrawerHeader(
-            decoration: BoxDecoration(
-              color: Colors.blue,
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                CircleAvatar(
-                  radius: 40,
-                  backgroundImage: NetworkImage(
-                      'https://googleflutter.com/sample_image.jpg'),
-                ),
-                SizedBox(
-                  height: 8,
-                ),
-                Text('Trần Gia Ân'),
-                Text('H@st.huflit.edu.vn'),
-              ],
-            ),
-          ),
-          ListTile(
-            leading: const Icon(Icons.home),
-            title: const Text('Home'),
-            onTap: () {
-              Navigator.pop(context);
-              _selectedIndex = 0;
-              setState(() {});
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.person),
-            title: const Text('Register'),
-            onTap: () {
-              Navigator.pop(context);
-              _selectedIndex = 3;
-              setState(() {});
-            },
-          ),
-          const Divider(
-            color: Colors.black,
-          ),
-          ListTile(
-            leading: const Icon(Icons.exit_to_app),
-            title: const Text('Logout'),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const LoginForm()),
-              );
-            },
-          ),
-        ],
-      )),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'register',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.amber[800],
-        unselectedItemColor: Colors.grey,
-        onTap: _onItemTapped,
+
+  bottomNavigationBar: BottomNavigationBar(
+    items: const <BottomNavigationBarItem>[
+      BottomNavigationBarItem(
+        icon: Icon(Icons.home),
+        label: 'home',
       ),
-      body: _loadWidget(_selectedIndex),
-    );
+      BottomNavigationBarItem(
+        icon: Icon(Icons.contact_mail),
+        label: 'contact',
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.supervised_user_circle),
+        label: 'Info',
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.person),
+        label: 'register',
+      ),
+    ],
+    currentIndex: _selectedIndex,
+    selectedItemColor: Colors.amber[800],
+    unselectedItemColor: const Color.fromARGB(255, 238, 77, 77),
+    onTap: _onItemTapped,
+  ),
+  body: _loadWidget(_selectedIndex),
+);
+
   }
 }

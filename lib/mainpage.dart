@@ -59,25 +59,25 @@ class _MainpageState extends State<Mainpage> {
   bottomNavigationBar: BottomNavigationBar(
     items: const <BottomNavigationBarItem>[
       BottomNavigationBarItem(
-        icon: Icon(Icons.home),
-        label: 'home',
+        icon: Icon(Icons.auto_graph_outlined),
+        label: 'Results',
       ),
       BottomNavigationBarItem(
-        icon: Icon(Icons.contact_mail),
-        label: 'contact',
+        icon: Icon(Icons.list),
+        label: 'Polls',
       ),
       BottomNavigationBarItem(
-        icon: Icon(Icons.supervised_user_circle),
-        label: 'Info',
+        icon: Icon(Icons.history),
+        label: 'History',
       ),
       BottomNavigationBarItem(
         icon: Icon(Icons.person),
-        label: 'register',
+        label: 'Profile',
       ),
     ],
     currentIndex: _selectedIndex,
-    selectedItemColor: Colors.amber[800],
-    unselectedItemColor: const Color.fromARGB(255, 238, 77, 77),
+    selectedItemColor: Colors.purple[800],
+    unselectedItemColor: Color.fromARGB(255, 170, 159, 218),
     onTap: _onItemTapped,
   ),
   body: _loadWidget(_selectedIndex),

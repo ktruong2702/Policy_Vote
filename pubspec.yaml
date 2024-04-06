@@ -58,21 +58,31 @@ dev_dependencies:
 # The following section is specific to Flutter packages.
 flutter: 
   uses-material-design: true
-  # assets: 
-  #   - assets/
-  #   - assets/images/
-  # fonts: 
-  #   - family: Comfortaa
-  #     fonts: 
-  #       - asset: assets/fonts/ComfortaaRegular.ttf
-  #         weight: 400
-  #   - family: Roboto
-  #     fonts: 
-  #       - asset: assets/fonts/RobotoBlack.ttf
-  #         weight: 900
-  #       - asset: assets/fonts/RobotoRegular.ttf
-  #         weight: 400
-
+  assets: 
+    - assets/images/policyvotelogo.jpg
+  fonts: 
+    # - family: Comfortaa
+    #   fonts: 
+    #     - asset: assets/fonts/ComfortaaRegular.ttf
+    #       weight: 400
+    - family: Roboto
+      fonts: 
+        - asset: assets/fonts/Roboto-Black.ttf
+          weight: 900
+        - asset: assets/fonts/Roboto-Regular.ttf
+          weight: 400
+    - family: PTSerif
+      fonts:
+        - asset: assets/fonts/PTSerif-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/PTSerif-BoldItalic.ttf
+          weight: 700
+          style: italic
+        - asset: assets/fonts/PTSerif-Italic.ttf
+          weight: 400
+          style: italic
+        - asset: assets/fonts/PTSerif-Regular.ttf
+          weight: 400
 
   # To add assets to your application, add an assets section, like this:
   # assets:

@@ -1,3 +1,4 @@
+import 'package:bai3/mainpage.dart';
 import 'package:bai3/page/splashscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -24,7 +25,7 @@ class _LoginFormState extends State<LoginForm> {
       // Successful login
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const HomePage()),
+        MaterialPageRoute(builder: (context) => const Mainpage()),
       );
     } else {
       // Invalid credentials

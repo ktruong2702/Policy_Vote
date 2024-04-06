@@ -1,4 +1,5 @@
 import 'package:bai3/model/user.dart';
+import 'package:bai3/page/splashscreen.dart';
 import 'package:flutter/material.dart';
 
 class Detail extends StatelessWidget {
@@ -10,151 +11,84 @@ class Detail extends StatelessWidget {
   Widget build(BuildContext context) {
     TextStyle mystyle = const TextStyle(
       fontSize: 24,
-      fontWeight: FontWeight.bold,
-      color: Colors.amber,
+      fontWeight: FontWeight.w400,
+      color: Colors.black,
+      fontFamily: 'PTSerif',
     );
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('User Detail'),
-        automaticallyImplyLeading: false, // Hủy nút back mặc định
+        automaticallyImplyLeading: false,
+        centerTitle: true,
+        title: const Text(
+          'Profile',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 20.0,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: Color.fromARGB(230, 68, 71, 245),
+        elevation: 0,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10.0),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 5,
-                    blurRadius: 7,
-                    offset: const Offset(0, 3), // changes position of shadow
+      body: Container(
+        color: Colors.white,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Column(
+                children: [
+                  Align(
+                    alignment: Alignment.center,
+                    child: Column(
+                      children: [
+                        CircleAvatar(
+                          radius: 60,
+                          backgroundImage: NetworkImage('https://i.imgur.com/0X4O98q.png'),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
-              child: TextFormField(
-                initialValue: user.fullname,
-                readOnly: true,
-                style: mystyle,
-                decoration: InputDecoration(
-                  labelText: 'Full Name',
-                  labelStyle: mystyle,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                    borderSide: const BorderSide(
-                      color: Colors.transparent,
-                      width: 0,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10.0),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 5,
-                    blurRadius: 7,
-                    offset: const Offset(0, 3), // changes position of shadow
+              Row(
+                children: [
+                  const Icon(Icons.person, color: Colors.black),
+                  const SizedBox(width: 10),
+                  Text(
+                    'Full name',
+                    style: mystyle,
                   ),
                 ],
               ),
-              child: TextFormField(
-                initialValue: user.email,
-                readOnly: true,
-                style: mystyle,
-                decoration: InputDecoration(
-                  labelText: 'Email',
-                  labelStyle: mystyle,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                    borderSide: const BorderSide(
-                      color: Colors.transparent,
-                      width: 0,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10.0),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 5,
-                    blurRadius: 7,
-                    offset: const Offset(0, 3), // changes position of shadow
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  const Icon(Icons.email, color: Colors.black),
+                  const SizedBox(width: 10),
+                  Text(
+                    'Email', 
+                    style: mystyle,
                   ),
                 ],
               ),
-              child: TextFormField(
-                initialValue: user.gender,
-                readOnly: true,
-                style: mystyle,
-                decoration: InputDecoration(
-                  labelText: 'Gender',
-                  labelStyle: mystyle,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                    borderSide: const BorderSide(
-                      color: Colors.transparent,
-                      width: 0,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10.0),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 5,
-                    blurRadius: 7,
-                    offset: const Offset(0, 3), // changes position of shadow
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  const Icon(Icons.logout, color: Colors.black),
+                  const SizedBox(width: 10),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const SplashScreen()));
+                    },
+                    child: const Text('Log out'),
                   ),
                 ],
               ),
-              child: TextFormField(
-                initialValue: user.favorite,
-                readOnly: true,
-                style: mystyle,
-                decoration: InputDecoration(
-                  labelText: 'Favorite',
-                  labelStyle: mystyle,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                    borderSide: const BorderSide(
-                      color: Colors.transparent,
-                      width: 0,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 32),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text('Go back!'),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

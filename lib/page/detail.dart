@@ -1,11 +1,11 @@
-import 'package:bai3/model/user.dart';
+import 'package:bai3/model/my_user.dart';
 import 'package:bai3/page/splashscreen.dart';
 import 'package:flutter/material.dart';
 
 class Detail extends StatelessWidget {
   const Detail({Key? key, required this.user}) : super(key: key);
 
-  final User user;
+  final MyUser user;
 
   @override
   Widget build(BuildContext context) {

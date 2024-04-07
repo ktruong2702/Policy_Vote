@@ -1,24 +1,72 @@
-import 'package:bai3/model/user.dart';
-import 'package:bai3/page/detail.dart';
 import 'package:flutter/material.dart';
+import 'package:bai3/page/detail.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:bai3/model/my_user.dart';
 
 class Register extends StatefulWidget {
-  const Register({super.key});
+  const Register({Key? key}) : super(key: key);
 
   @override
-  State<Register> createState() => _RegisterState();
+  _RegisterState createState() => _RegisterState();
 }
 
 class _RegisterState extends State<Register> {
-  final bool _checkvalue_1 = false;
-  final bool _checkvalue_2 = false;
-  final bool _checkvalue_3 = false;
-
-  final int _gender = 0;
-  final _nameController = TextEditingController();
+  final _f_nameController = TextEditingController();
+  final _l_nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _confirmpassController = TextEditingController();
+  final _usernameController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
+
+  // Function to register user and save data to Firebase
+  Future<void> _register() async {
+    try {
+      // Check if passwords match
+      if (_passwordController.text != _confirmPasswordController.text) {
+        // Show error message if passwords don't match
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Passwords do not match')),
+        );
+        return;
+      }
+
+      // Register user with email and password
+      UserCredential userCredential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
+
+      // Save user data to Firestore
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userCredential.user!.uid)
+          .set({
+        'email': _emailController.text,
+        'f_name': _f_nameController.text
+            .split(" ")
+            .first, // Assuming first part is first name
+        'l_name': _l_nameController.text
+            .split(" ")
+            .last, // Assuming last part is last name
+        'reg': Timestamp.now(),
+        'password' : _passwordController.text,
+        'username' : _usernameController.text,
+      });
+
+      // Show success notification
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Registration successful')),
+      );
+    } catch (error) {
+      // Handle registration errors
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Registration failed: $error')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,15 +83,32 @@ class _RegisterState extends State<Register> {
                   child: const Text(
                     'User Information',
                     style: TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.blue),
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blue,
+                    ),
                   ),
                 ),
                 TextFormField(
-                  controller: _nameController,
+                  controller: _f_nameController,
                   decoration: const InputDecoration(
-                    labelText: "Full Name",
+                    labelText: "First Name",
+                    icon: Icon(Icons.person),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: _l_nameController,
+                  decoration: const InputDecoration(
+                    labelText: "Last Name",
+                    icon: Icon(Icons.person),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: _usernameController,
+                  decoration: const InputDecoration(
+                    labelText: "Username",
                     icon: Icon(Icons.person),
                   ),
                 ),
@@ -66,54 +131,45 @@ class _RegisterState extends State<Register> {
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
-                  controller: _confirmpassController,
+                  controller: _confirmPasswordController,
                   obscureText: true,
                   decoration: const InputDecoration(
                     labelText: "Confirm password",
                     icon: Icon(Icons.password),
                   ),
                 ),
+                const SizedBox(height: 20),
                 Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          // Lấy giá trị
-                          var fullName = _nameController.text;
-                          var email = _emailController.text;
-                          var objUser = User(
-                            fullname: fullName,
-                            email: email,
-                          );
-
-// Điều hướng đến trang chi tiết
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => Detail(user: objUser),
-                            ),
-                          );
-                        },
-                        child: const Text('Register'),
-                      ),
+                    ElevatedButton(
+                      onPressed: _register,
+                      child: const Text('Register'),
                     ),
-                    const SizedBox(
-                      width: 16,
-                    ),
-                    Expanded(
-                      child: OutlinedButton(
-                        onPressed: () {},
-                        child: const Text('Login'),
-                      ),
+                    const SizedBox(width: 16),
+                    OutlinedButton(
+                      onPressed: () {
+                        // Handle login button tap
+                      },
+                      child: const Text('Login'),
                     ),
                   ],
-                )
+                ),
               ],
             ),
           ),
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _f_nameController.dispose();
+    _l_nameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    super.dispose();
   }
 }

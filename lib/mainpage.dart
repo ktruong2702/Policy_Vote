@@ -1,4 +1,4 @@
-import 'package:bai3/model/user.dart';
+import 'package:bai3/model/my_user.dart';
 import 'package:bai3/page/createPoll.dart';
 import 'package:bai3/page/defulatwidget.dart';
 import 'package:bai3/page/home.dart';
@@ -9,7 +9,7 @@ import 'package:bai3/page/splashscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:bai3/page/polls.dart';
 import 'package:bai3/page/Detail.dart';
-import 'package:bai3/model/user.dart';
+import 'package:bai3/model/my_user.dart';
 
 class Mainpage extends StatefulWidget {
   const Mainpage({super.key});
@@ -20,7 +20,7 @@ class Mainpage extends StatefulWidget {
 class _MainpageState extends State<Mainpage> {
   int _selectedIndex = 0;
   String selectedQuestion = "";
-  User user = User();
+  MyUser user = MyUser(fullname: '', email: '');
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;

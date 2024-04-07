@@ -1,9 +1,15 @@
 class MyUser {
-  final String fullname;
   final String email;
+  final String f_name ;
+  final String l_name ;
+  final String username ; 
 
   MyUser({
-    required this.fullname,
-    required this.email,
+    required this.email, required String uid,
+    required this.f_name, 
+    required this.l_name , 
+    required this.username ,
   });
+
+
 }

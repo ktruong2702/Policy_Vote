@@ -36,6 +36,7 @@ class _LoginFormState extends State<LoginForm> {
         f_name: userSnapshot['f_name'],
         l_name: userSnapshot['l_name'],
         username: userSnapshot['username'],
+        password: userSnapshot['password'],
         uid: userCredential.user!.uid,
       );
       // Chuyển sang trang Mainpage và truyền thông tin người dùng
@@ -67,6 +68,7 @@ class _LoginFormState extends State<LoginForm> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.white,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -78,7 +80,7 @@ class _LoginFormState extends State<LoginForm> {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(50.0),
+        padding: const EdgeInsets.fromLTRB(16,150,16,16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -87,6 +89,8 @@ class _LoginFormState extends State<LoginForm> {
               style: TextStyle(
                 fontSize: 50.0,
                 fontWeight: FontWeight.bold,
+                fontFamily: 'PTSerif',
+                color: Color.fromARGB(255, 84, 78, 110),
               ),
             ),
             const SizedBox(height: 20.0),
@@ -133,7 +137,14 @@ class _LoginFormState extends State<LoginForm> {
             const SizedBox(height: 20.0),
             ElevatedButton(
               onPressed: _login,
-              child: const Text('Login'),
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>
+                    (Color.fromARGB(255, 155, 133, 255)!,),
+                foregroundColor:
+                    MaterialStateProperty.all<Color>
+                    (Colors.white),
+              ),
+              child: const Text(' Login '),
             ),
           ],
         ),

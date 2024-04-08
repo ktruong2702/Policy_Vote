@@ -1,3 +1,4 @@
+import 'package:bai3/page/login.dart';
 import 'package:flutter/material.dart';
 import 'package:bai3/page/detail.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -30,7 +31,18 @@ class _RegisterState extends State<Register> {
         );
         return;
       }
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .where('username', isEqualTo: _usernameController.text)
+        .get();
 
+      if (querySnapshot.docs.isNotEmpty) {
+        // Show error message if username already exists
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('The username is already in use by another account')),
+        );
+        return;
+      }
       // Register user with email and password
       UserCredential userCredential =
           await FirebaseAuth.instance.createUserWithEmailAndPassword(
@@ -51,8 +63,8 @@ class _RegisterState extends State<Register> {
             .split(" ")
             .last, // Assuming last part is last name
         'reg': Timestamp.now(),
-        'password' : _passwordController.text,
-        'username' : _usernameController.text,
+        'password': _passwordController.text,
+        'username': _usernameController.text,
       });
 
       // Show success notification
@@ -61,101 +73,134 @@ class _RegisterState extends State<Register> {
       );
     } catch (error) {
       // Handle registration errors
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Registration failed: $error')),
-      );
+      if (error is FirebaseAuthException && error.code == 'invalid-email') {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('The email address is badly formatted')),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Registration failed: $error')),
+        );
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+      ),
       body: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 100), //shifting all upward
         child: Center(
           child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  alignment: Alignment.center,
-                  child: const Text(
-                    'User Information',
-                    style: TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.blue,
+            child: DefaultTextStyle(
+              style: const TextStyle(
+                fontFamily: 'PTSerif',
+                color: Colors.black,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    alignment: Alignment.center,
+                    child: const Text(
+                      'Registration',
+                      style: TextStyle(
+                        fontSize: 50,
+                        fontWeight: FontWeight.bold,
+                        color: Color.fromARGB(255, 84, 78, 110),
+                      ),
                     ),
                   ),
-                ),
-                TextFormField(
-                  controller: _f_nameController,
-                  decoration: const InputDecoration(
-                    labelText: "First Name",
-                    icon: Icon(Icons.person),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  controller: _l_nameController,
-                  decoration: const InputDecoration(
-                    labelText: "Last Name",
-                    icon: Icon(Icons.person),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  controller: _usernameController,
-                  decoration: const InputDecoration(
-                    labelText: "Username",
-                    icon: Icon(Icons.person),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  controller: _emailController,
-                  decoration: const InputDecoration(
-                    labelText: "Email",
-                    icon: Icon(Icons.email),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  controller: _passwordController,
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                    labelText: "Password",
-                    icon: Icon(Icons.password),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  controller: _confirmPasswordController,
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                    labelText: "Confirm password",
-                    icon: Icon(Icons.password),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ElevatedButton(
-                      onPressed: _register,
-                      child: const Text('Register'),
+                  const SizedBox(height: 16),
+                  TextFormField(
+                    controller: _f_nameController,
+                    decoration: const InputDecoration(
+                      labelText: "First Name",
+                      icon: Icon(Icons.person_add),
                     ),
-                    const SizedBox(width: 16),
-                    OutlinedButton(
-                      onPressed: () {
-                        // Handle login button tap
-                      },
-                      child: const Text('Login'),
+                  ),
+                  const SizedBox(height: 16),
+                  TextFormField(
+                    controller: _l_nameController,
+                    decoration: const InputDecoration(
+                      labelText: "Last Name",
+                      icon: Icon(Icons.person_add_alt_1),
                     ),
-                  ],
-                ),
-              ],
+                  ),
+                  const SizedBox(height: 16),
+                  TextFormField(
+                    controller: _usernameController,
+                    decoration: const InputDecoration(
+                      labelText: "Username",
+                      icon: Icon(Icons.person_outline_sharp),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  TextFormField(
+                    controller: _emailController,
+                    decoration: const InputDecoration(
+                      labelText: "Email",
+                      icon: Icon(Icons.email),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  TextFormField(
+                    controller: _passwordController,
+                    obscureText: true,
+                    decoration: const InputDecoration(
+                      labelText: "Password",
+                      icon: Icon(Icons.password),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  TextFormField(
+                    controller: _confirmPasswordController,
+                    obscureText: true,
+                    decoration: const InputDecoration(
+                      labelText: "Confirm Password",
+                      icon: Icon(Icons.password),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                        onPressed: _register,
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>
+                              (Color.fromARGB(255, 150, 136, 214)!,),
+                          foregroundColor:
+                              MaterialStateProperty.all<Color>
+                              (Colors.white),
+                        ),
+                        child: const Text('Register'),
+                      ),
+                      const SizedBox(width: 16),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const LoginForm()));
+                        },
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>
+                              (Color.fromARGB(255, 155, 133, 255)!,),
+                          foregroundColor:
+                              MaterialStateProperty.all<Color>
+                              (Colors.white),
+                        ),
+                        child: const Text(' Login '),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),

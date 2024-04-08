@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -116,13 +118,41 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-class QuestionListPage extends StatelessWidget {
+class QuestionState extends ChangeNotifier {
+  Map<String, String?> selectedAnswers =
+      {}; // Store selected answers for each question
+
+  void setSelectedAnswer(String questionId, String? answer) {
+    selectedAnswers[questionId] =
+        answer; // Update selected answer for the question
+    // Do not notify listeners here
+  }
+
+  String? getSelectedAnswer(String questionId) {
+    return selectedAnswers[
+        questionId]; // Retrieve selected answer for the question
+  }
+
+  void clearSelectedAnswers() {
+    selectedAnswers.clear(); // Clear all selected answers
+    notifyListeners(); // Notify listeners after clearing
+  }
+}
+
+class QuestionListPage extends StatefulWidget {
   final String? pollId;
 
   const QuestionListPage({Key? key, this.pollId}) : super(key: key);
 
   @override
+  _QuestionListPageState createState() => _QuestionListPageState();
+}
+
+class _QuestionListPageState extends State<QuestionListPage> {
+  @override
   Widget build(BuildContext context) {
+    final questionState = Provider.of<QuestionState>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Questions for Poll'),
@@ -130,7 +160,7 @@ class QuestionListPage extends StatelessWidget {
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection('questions')
-            .where('poll_id', isEqualTo: pollId)
+            .where('poll_id', isEqualTo: widget.pollId)
             .snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -139,49 +169,100 @@ class QuestionListPage extends StatelessWidget {
           if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
           }
-          return ListView.builder(
-            itemCount: snapshot.data!.docs.length,
-            itemBuilder: (context, index) {
-              DocumentSnapshot questionDocument = snapshot.data!.docs[index];
-              return FutureBuilder(
-                future: FirebaseFirestore.instance
-                    .collection('options')
-                    .where('question_id', isEqualTo: questionDocument.id)
-                    .get(),
-                builder:
-                    (context, AsyncSnapshot<QuerySnapshot> optionSnapshot) {
-                  if (optionSnapshot.connectionState ==
-                      ConnectionState.waiting) {
-                    return CircularProgressIndicator();
-                  }
-                  if (optionSnapshot.hasError) {
-                    return Text('Error: ${optionSnapshot.error}');
-                  }
-                  return ListTile(
-                    title: Text(questionDocument['question_txt']),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: optionSnapshot.data!.docs
-                          .map((DocumentSnapshot optionDocument) {
-                        return RadioListTile<String>(
-                          title: Text(optionDocument['option_txt']),
-                          value: optionDocument.id,
-                          groupValue:
-                              null, // Điền giá trị của nhóm ở đây nếu bạn muốn sử dụng RadioButton
-                          onChanged: (String? value) {
-                            // Viết logic của bạn ở đây để xử lý khi người dùng chọn một câu trả lời
-                            // Ví dụ: update dữ liệu trong Firebase
-                          },
+          if (snapshot.data!.docs.isEmpty) {
+            // Không có câu hỏi nào, hiển thị nút "Vote"
+            return Center(
+              child: ElevatedButton(
+                onPressed: () {
+                  if (questionState.selectedAnswers.isNotEmpty) {
+                    // Store selected answers when the button is pressed
+                    saveAnswerToFirebase(
+                        questionState.selectedAnswers as String?, widget.pollId);
+                    // Clear selected answers after storing
+                    questionState.clearSelectedAnswers();
+                  } else {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: Text('Please select an answer'),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: Text('OK'),
+                            ),
+                          ],
                         );
-                      }).toList(),
-                    ),
-                  );
+                      },
+                    );
+                  }
                 },
-              );
-            },
-          );
+                child: Text('Vote'),
+              ),
+            );
+          } else {
+            // Có câu hỏi được tải lên, hiển thị danh sách câu hỏi
+            return ListView.builder(
+              itemCount: snapshot.data!.docs.length,
+              itemBuilder: (context, index) {
+                DocumentSnapshot questionDocument = snapshot.data!.docs[index];
+                String questionId = questionDocument.id;
+
+                return ListTile(
+                  title: Text(questionDocument['question_txt']),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      RadioListTile<String>(
+                        title: Text('Yes'),
+                        value: 'yes',
+                        groupValue: questionState.getSelectedAnswer(questionId),
+                        onChanged: (String? value) {
+                          questionState.setSelectedAnswer(questionId, value);
+                        },
+                      ),
+                      RadioListTile<String>(
+                        title: Text('No'),
+                        value: 'no',
+                        groupValue: questionState.getSelectedAnswer(questionId),
+                        onChanged: (String? value) {
+                          questionState.setSelectedAnswer(questionId, value);
+                        },
+                      ),
+                      RadioListTile<String>(
+                        title: Text('No Answer'),
+                        value: 'no_answer',
+                        groupValue: questionState.getSelectedAnswer(questionId),
+                        onChanged: (String? value) {
+                          questionState.setSelectedAnswer(questionId, value);
+                        },
+                      ),
+                    ],
+                  ),
+                );
+              },
+            );
+          }
         },
       ),
     );
   }
+}
+
+void saveAnswerToFirebase(String? answer, String? pollId) {
+  String userId = FirebaseAuth.instance.currentUser!.uid;
+
+  // Thực hiện lưu câu trả lời vào Firebase
+  FirebaseFirestore.instance.collection('user_answers').add({
+    'poll_id': pollId,
+    'timestamp': Timestamp.now(),
+    'user_id': userId,
+    'answer': answer,
+  }).then((_) {
+    print('Answer saved to Firebase');
+  }).catchError((error) {
+    print('Failed to save answer: $error');
+  });
 }

@@ -41,6 +41,7 @@ dependencies:
   http: any
   firebase_auth: ^4.19.0
   charts_flutter: ^0.12.0
+  font_awesome_flutter: ^10.7.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

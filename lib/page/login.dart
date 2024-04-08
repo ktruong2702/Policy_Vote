@@ -1,12 +1,9 @@
 import 'package:bai3/mainpage.dart';
 import 'package:bai3/model/my_user.dart';
 import 'package:bai3/page/splashscreen.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:bai3/page/polls.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
+import 'package:flutter/material.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({Key? key}) : super(key: key);
@@ -20,56 +17,40 @@ class _LoginFormState extends State<LoginForm> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-// void _login() {
-  //   String email = _emailController.text;
-  //   String password = _passwordController.text;
-  //   String username = _usernameController.text;
-
-  //   // Mock login logic
-  //   if (email == 'user@example.com' || password == 'password' && username == 'testusername' || password == 'password') {
-  //     // Successful login
-  //     Navigator.pushReplacement(
-  //       context,
-  //       MaterialPageRoute(builder: (context) => const Mainpage()),
-  //     );
-  //   } else {
-  //     // Invalid credentials
-  //     showDialog(
-  //       context: context,
-  //       builder: (context) => AlertDialog(
-  //         title: const Text('Invalid Credentials'),
-  //         content: const Text('Please enter valid email/username and password.'),
-  //         actions: [
-  //           TextButton(
-  //             onPressed: () => Navigator.pop(context),
-  //             child: const Text('OK'),
-  //           ),
-  //         ],
-  //       ),
-  //     );
-  //   }
-  // }
-
-
   void _login() async {
     String email = _emailController.text;
     String password = _passwordController.text;
     try {
-      UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
+      // Truy xuất thông tin người dùng từ Firestore
+      DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userCredential.user!.uid)
+          .get();
+      MyUser user = MyUser(
+        email: userSnapshot['email'],
+        f_name: userSnapshot['f_name'],
+        l_name: userSnapshot['l_name'],
+        username: userSnapshot['username'],
+        uid: userCredential.user!.uid,
+      );
+      // Chuyển sang trang Mainpage và truyền thông tin người dùng
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const Mainpage())
+        MaterialPageRoute(builder: (context) => Mainpage(user: user)),
       );
     } catch (e) {
-      // If login fails, show an error dialog
+      // Xử lý khi đăng nhập thất bại
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
           title: const Text('Login Failed'),
-          content: const Text('Your email or password is incorrect. Please try again.'),
+          content: const Text(
+              'Your email or password is incorrect. Please try again.'),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),

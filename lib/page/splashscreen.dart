@@ -1,9 +1,6 @@
-import 'dart:io';
-import 'package:flutter/material.dart';
 import 'package:bai3/page/Voter/register.dart';
 import 'package:bai3/page/login.dart';
-import 'package:bai3/mainpage.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 
 
 class SplashScreen extends StatelessWidget {
@@ -88,24 +85,24 @@ class SplashScreen extends StatelessWidget {
             ),
             const SizedBox(height: 20),
 
-              ElevatedButton(
-              onPressed: () {
-                // Navigator để điều hướng tới trang RegisterPage
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const Mainpage()),
-                );
-              },
-              style: ButtonStyle(
-                // Đặt padding để làm cho nút rộng và dài ra
-                padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                  const EdgeInsets.symmetric(horizontal: 100.0, vertical: 16.0),
-                ),
-                backgroundColor: MaterialStateProperty.all<Color>(Color.fromARGB(171, 170, 159, 218)!),
-                foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-              ),
-              child: const Text('  Home  '),
-            ),
+            //   ElevatedButton(
+            //   onPressed: () {
+            //     // Navigator để điều hướng tới trang RegisterPage
+            //     Navigator.push(
+            //       context,
+            //       MaterialPageRoute(builder: (context) => const Mainpage(user: user)),
+            //     );
+            //   },
+            //   style: ButtonStyle(
+            //     // Đặt padding để làm cho nút rộng và dài ra
+            //     padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+            //       const EdgeInsets.symmetric(horizontal: 100.0, vertical: 16.0),
+            //     ),
+            //     backgroundColor: MaterialStateProperty.all<Color>(Color.fromARGB(171, 170, 159, 218)!),
+            //     foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+            //   ),
+            //   child: const Text('  Home  '),
+            // ),
           ],
         ),
       ),

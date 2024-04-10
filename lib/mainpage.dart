@@ -33,7 +33,7 @@ class _MainpageState extends State<Mainpage> {
         }
       case 1:
         {
-          return const HomePage();
+          return  HomePage(user: widget.user);
         }
       case 2:
         {

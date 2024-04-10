@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'dart:async';
 
+
 class HomePage extends StatefulWidget {
   final MyUser user;
 
@@ -99,6 +100,8 @@ class _HomePageState extends State<HomePage> {
                             builder: (context) => AlertDialog(
                               title: Text('Voted'),
                               content: Text('You have already voted this poll'),
+
+
                               actions: [
                                 TextButton(
                                   onPressed: () {

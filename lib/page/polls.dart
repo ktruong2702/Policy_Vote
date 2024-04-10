@@ -3,6 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'dart:async';
+
 
 class HomePage extends StatefulWidget {
   final MyUser user;
@@ -65,9 +67,11 @@ class _HomePageState extends State<HomePage> {
               if (snapshot.hasError) {
                 return Text('Error: ${snapshot.error}');
               }
-
-              List<QueryDocumentSnapshot> visibleQuestions =
-                  snapshot.data!.docs;
+              List<QueryDocumentSnapshot> allQuestions =
+                  snapshot.data!.docs; // All available polls
+              List<QueryDocumentSnapshot> visibleQuestions = showAllQuestions
+                  ? allQuestions
+                  : allQuestions.take(10).toList();
 
               // Hiển thị danh sách
               return ListView(
@@ -94,8 +98,10 @@ class _HomePageState extends State<HomePage> {
                           showDialog(
                             context: context,
                             builder: (context) => AlertDialog(
-                              title: Text('You have voted this poll'),
-                              content: Text('You have already voted this poll.'),
+                              title: Text('Voted'),
+                              content: Text('You have already voted this poll'),
+
+
                               actions: [
                                 TextButton(
                                   onPressed: () {
@@ -138,15 +144,24 @@ class _HomePageState extends State<HomePage> {
                       ),
                     );
                   }),
-                  if (visibleQuestions.length > 5)
+                  if (allQuestions.length > 5 &&
+                      !showAllQuestions) // Show the "Show All" button only if there are more than 5 polls and showAllQuestions is false
                     TextButton(
                       onPressed: () {
                         setState(() {
-                          showAllQuestions = !showAllQuestions;
+                          showAllQuestions = true;
                         });
                       },
-                      child: Text(
-                          showAllQuestions ? 'Show Less' : 'Show All Polls'),
+                      child: Text('Show All Polls'),
+                    ),
+                  if (showAllQuestions) // Show the "Show Less" button if showAllQuestions is true
+                    TextButton(
+                      onPressed: () {
+                        setState(() {
+                          showAllQuestions = false;
+                        });
+                      },
+                      child: Text('Show Less'),
                     ),
                 ],
               );
@@ -216,7 +231,7 @@ class _QuestionListPageState extends State<QuestionListPage> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Question List - Poll $pollId'),
+          title: Text('Question List'),
         ),
         body: StreamBuilder(
           stream: FirebaseFirestore.instance

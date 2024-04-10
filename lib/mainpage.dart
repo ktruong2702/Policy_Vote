@@ -43,7 +43,7 @@ class _MainpageState extends State<Mainpage> {
         {
           return UserDetailPage(
               user: widget
-                  .user); // Sử dụng widget.user để truy cập vào đối tượng người dùng được truyền từ Mainpage
+                  .user, uid: widget.user.uid); // Sử dụng widget.user để truy cập vào đối tượng người dùng được truyền từ Mainpage
         }
       default:
         return const DefaultWidget(title: "None");

@@ -11,5 +11,6 @@ class MyUser {
     required this.l_name,
     required this.username,
     required this.uid, // Initialize uid in the constructor
+
   });
 }

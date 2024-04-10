@@ -1,9 +1,10 @@
+import 'dart:async';
+
 import 'package:bai3/model/my_user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'dart:async';
 
 
 class HomePage extends StatefulWidget {
@@ -49,7 +50,7 @@ class _HomePageState extends State<HomePage> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: Color.fromARGB(230, 68, 71, 245),
+        backgroundColor: Color.fromARGB(255, 101, 83, 182),
         elevation: 0,
       ),
       body: Container(

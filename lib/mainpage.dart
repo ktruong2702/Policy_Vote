@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 
 class Mainpage extends StatefulWidget {
   final MyUser user;
-
+  
   const Mainpage({Key? key, required this.user}) : super(key: key);
 
   @override
@@ -29,7 +29,7 @@ class _MainpageState extends State<Mainpage> {
     switch (index) {
       case 0:
         {
-          return PollHomePage();
+          return PollAnswerResult(userId: widget.user.uid );
         }
       case 1:
         {

@@ -1,9 +1,7 @@
 import 'package:bai3/page/login.dart';
 import 'package:flutter/material.dart';
-import 'package:bai3/page/detail.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:bai3/model/my_user.dart';
 
 class Register extends StatefulWidget {
   const Register({Key? key}) : super(key: key);
@@ -173,7 +171,7 @@ class _RegisterState extends State<Register> {
                         onPressed: _register,
                         style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all<Color>
-                              (Color.fromARGB(255, 150, 136, 214)!,),
+                              (const Color.fromARGB(255, 150, 136, 214),),
                           foregroundColor:
                               MaterialStateProperty.all<Color>
                               (Colors.white),
@@ -190,7 +188,7 @@ class _RegisterState extends State<Register> {
                         },
                         style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all<Color>
-                              (Color.fromARGB(255, 155, 133, 255)!,),
+                              (const Color.fromARGB(255, 155, 133, 255),),
                           foregroundColor:
                               MaterialStateProperty.all<Color>
                               (Colors.white),

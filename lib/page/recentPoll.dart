@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
@@ -39,7 +38,7 @@ class _RecentPollPageState extends State<RecentPollPage> {
             fontFamily: 'PTSerif'
           ),
         ),
-        backgroundColor: Color.fromARGB(255, 101, 83, 182),
+        backgroundColor: const Color.fromARGB(255, 101, 83, 182),
         elevation: 0,
       ),
       body: Container(
@@ -49,13 +48,13 @@ class _RecentPollPageState extends State<RecentPollPage> {
             stream: _pollStream,
             builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return CircularProgressIndicator();
+                return const CircularProgressIndicator();
               }
               if (snapshot.hasError) {
                 return Text('Error: ${snapshot.error}');
               }
               if (snapshot.data!.docs.isEmpty) {
-                return Center(
+                return const Center(
                   child: Text('No expired polls available'),
                 );
               }
@@ -80,7 +79,7 @@ class _RecentPollPageState extends State<RecentPollPage> {
                           _showAllPolls = true;
                         });
                       },
-                      child: Text('See All'),
+                      child: const Text('See All'),
                     ),
                   if (_showAllPolls)
                     TextButton(
@@ -89,7 +88,7 @@ class _RecentPollPageState extends State<RecentPollPage> {
                           _showAllPolls = false;
                         });
                       },
-                      child: Text('Show Less'),
+                      child: const Text('Show Less'),
                     ),
                 ],
               );

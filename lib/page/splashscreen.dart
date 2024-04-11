@@ -58,7 +58,7 @@ class SplashScreen extends StatelessWidget {
               padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
                 const EdgeInsets.symmetric(horizontal: 100.0, vertical: 16.0),
               ),
-              backgroundColor: MaterialStateProperty.all<Color>(Color.fromARGB(171, 170, 159, 218)!),
+              backgroundColor: MaterialStateProperty.all<Color>(const Color.fromARGB(171, 170, 159, 218)),
               foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
             ),
             child: const Text('  Login  '),
@@ -78,7 +78,7 @@ class SplashScreen extends StatelessWidget {
                 padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
                   const EdgeInsets.symmetric(horizontal: 100.0, vertical: 16.0),
                 ),
-                backgroundColor: MaterialStateProperty.all<Color>(Color.fromARGB(171, 170, 159, 218)!),
+                backgroundColor: MaterialStateProperty.all<Color>(const Color.fromARGB(171, 170, 159, 218)),
                 foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
               ),
               child: const Text('Register'),

@@ -19,6 +19,7 @@ class PollAnswerResult extends StatelessWidget {
             fontSize: 20.0,
             fontWeight: FontWeight.bold,
           ),
+
         ),
         backgroundColor: Color.fromARGB(255, 101, 83, 182),
         elevation: 0,
@@ -45,6 +46,7 @@ class PollAnswerResult extends StatelessWidget {
           if (answeredPolls.isEmpty) {
             return Center(
               child: Text('You have not answered any polls yet.'),
+
             );
           }
 
@@ -66,6 +68,8 @@ class PollAnswerResult extends StatelessWidget {
               'selectedAnswer': selectedAnswer,
             });
           });
+
+
 
           return ListView.builder(
             itemCount: groupedPolls.length,

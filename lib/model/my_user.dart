@@ -13,6 +13,5 @@ class MyUser {
     required this.username,
     required this.password,
     required this.uid, // Initialize uid in the constructor
-
   });
 }

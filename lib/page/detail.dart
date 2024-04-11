@@ -134,7 +134,7 @@ class _UserDetailPageState extends State<UserDetailPage> {
             fontFamily: 'PTSerif'
           ),
         ),
-        backgroundColor: Color.fromARGB(255, 101, 83, 182),
+        backgroundColor: const Color.fromARGB(255, 101, 83, 182),
         elevation: 0,
       ),
       body: Padding(
@@ -146,7 +146,7 @@ class _UserDetailPageState extends State<UserDetailPage> {
               alignment: Alignment.centerRight,
               child: IconButton(
                 onPressed: toggleEdit,
-                icon: Icon(Icons.edit),
+                icon: const Icon(Icons.edit),
               ),
             ),
             ListTile(
@@ -168,7 +168,7 @@ class _UserDetailPageState extends State<UserDetailPage> {
                     )
                   : Text(widget.user.f_name),
             ),
-            Divider(),
+            const Divider(),
             ListTile(
               title: const Text(
                 'Last Name',
@@ -188,7 +188,7 @@ class _UserDetailPageState extends State<UserDetailPage> {
                     )
                   : Text(widget.user.l_name),
             ),
-            Divider(),
+            const Divider(),
             ListTile(
               title: const Text(
                 'Email',
@@ -201,7 +201,7 @@ class _UserDetailPageState extends State<UserDetailPage> {
               ),
               subtitle: Text(widget.user.email),
             ),
-            Divider(),
+            const Divider(),
             ListTile(
               title: const Text(
                 'Username',
@@ -214,7 +214,7 @@ class _UserDetailPageState extends State<UserDetailPage> {
               ),
               subtitle: Text(widget.user.username),
             ),
-            Divider(),
+            const Divider(),
             if (isEditing)
               ListTile(
                 title: const Text(
@@ -254,7 +254,7 @@ class _UserDetailPageState extends State<UserDetailPage> {
                   },
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all<Color>
-                      (Color.fromARGB(255, 155, 133, 255)!,),
+                      (const Color.fromARGB(255, 155, 133, 255),),
                     foregroundColor:MaterialStateProperty.all<Color>
                       (Colors.white),
               ),

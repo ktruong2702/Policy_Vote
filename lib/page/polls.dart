@@ -36,7 +36,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final userId = 'user_id'; // Thay đổi bằng user id thực tế
+    const userId = 'user_id'; // Thay đổi bằng user id thực tế
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -49,7 +49,7 @@ class _HomePageState extends State<HomePage> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: Color.fromARGB(230, 68, 71, 245),
+        backgroundColor: const Color.fromARGB(230, 68, 71, 245),
         elevation: 0,
       ),
       body: Container(
@@ -86,20 +86,20 @@ class _HomePageState extends State<HomePage> {
                       final now = Timestamp.now();
                       if (now.compareTo(expiredTime) >= 0) {
                         // Bỏ qua bài khảo sát đã hết hạn
-                        return SizedBox.shrink();
+                        return const SizedBox.shrink();
                       }
                     }
                     return GestureDetector(
                       onTap: () async {
                         final hasVoted =
-                            await hasUserVoted(widget.user, pollId!);
+                            await hasUserVoted(widget.user, pollId);
                         if (hasVoted) {
                           // Hiển thị thông báo rằng người dùng đã bỏ phiếu cho cuộc khảo sát này rồi
                           showDialog(
                             context: context,
                             builder: (context) => AlertDialog(
-                              title: Text('Voted'),
-                              content: Text('You have already voted this poll'),
+                              title: const Text('Voted'),
+                              content: const Text('You have already voted this poll'),
 
 
                               actions: [
@@ -107,7 +107,7 @@ class _HomePageState extends State<HomePage> {
                                   onPressed: () {
                                     Navigator.of(context).pop();
                                   },
-                                  child: Text('OK'),
+                                  child: const Text('OK'),
                                 ),
                               ],
                             ),
@@ -131,7 +131,7 @@ class _HomePageState extends State<HomePage> {
                           key: UniqueKey(), // Thêm key vào ListTile
                           title: Text(
                             pollData['title'],
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               color: Colors.black, // Loại bỏ màu đỏ nếu có khóa
                             ),
@@ -152,7 +152,7 @@ class _HomePageState extends State<HomePage> {
                           showAllQuestions = true;
                         });
                       },
-                      child: Text('Show All Polls'),
+                      child: const Text('Show All Polls'),
                     ),
                   if (showAllQuestions) // Show the "Show Less" button if showAllQuestions is true
                     TextButton(
@@ -161,7 +161,7 @@ class _HomePageState extends State<HomePage> {
                           showAllQuestions = false;
                         });
                       },
-                      child: Text('Show Less'),
+                      child: const Text('Show Less'),
                     ),
                 ],
               );
@@ -231,7 +231,7 @@ class _QuestionListPageState extends State<QuestionListPage> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Question List'),
+          title: const Text('Question List'),
         ),
         body: StreamBuilder(
           stream: FirebaseFirestore.instance
@@ -240,7 +240,7 @@ class _QuestionListPageState extends State<QuestionListPage> {
               .snapshots(),
           builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return CircularProgressIndicator();
+              return const CircularProgressIndicator();
             }
             if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
@@ -264,7 +264,7 @@ class _QuestionListPageState extends State<QuestionListPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           RadioListTile<String>(
-                            title: Text('Yes'),
+                            title: const Text('Yes'),
                             value: 'option_1',
                             groupValue: selectedAnswerId,
                             onChanged: (String? value) {
@@ -280,7 +280,7 @@ class _QuestionListPageState extends State<QuestionListPage> {
                             },
                           ),
                           RadioListTile<String>(
-                            title: Text('No'),
+                            title: const Text('No'),
                             value: 'option_2',
                             groupValue: selectedAnswerId,
                             onChanged: (String? value) {
@@ -296,7 +296,7 @@ class _QuestionListPageState extends State<QuestionListPage> {
                             },
                           ),
                           RadioListTile<String>(
-                            title: Text('No Answer'),
+                            title: const Text('No Answer'),
                             value: 'option_3',
                             groupValue: selectedAnswerId,
                             onChanged: (String? value) {
@@ -316,7 +316,7 @@ class _QuestionListPageState extends State<QuestionListPage> {
                               // Reset individual answer
                               _unchooseQuestion(questionState, questionId);
                             },
-                            child: Text('Reset'),
+                            child: const Text('Reset'),
                           ),
                         ],
                       ),
@@ -338,15 +338,15 @@ class _QuestionListPageState extends State<QuestionListPage> {
                     context: context,
                     builder: (BuildContext context) {
                       return AlertDialog(
-                        title: Text('Incomplete Answers'),
-                        content: Text(
+                        title: const Text('Incomplete Answers'),
+                        content: const Text(
                             'Please answer all questions before submitting.'),
                         actions: <Widget>[
                           TextButton(
                             onPressed: () {
                               Navigator.of(context).pop();
                             },
-                            child: Text('OK'),
+                            child: const Text('OK'),
                           ),
                         ],
                       );
@@ -361,7 +361,7 @@ class _QuestionListPageState extends State<QuestionListPage> {
                   Navigator.pop(context);
                 }
               },
-              child: Icon(Icons.check),
+              child: const Icon(Icons.check),
             );
           },
         ),
@@ -372,7 +372,7 @@ class _QuestionListPageState extends State<QuestionListPage> {
               // Reset all answers
               _showResetConfirmationDialog(questionState);
             },
-            child: Text('Reset All'),
+            child: const Text('Reset All'),
           ),
         ],
       ),
@@ -396,8 +396,8 @@ class _QuestionListPageState extends State<QuestionListPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Reset All Answers'),
-          content: Text(
+          title: const Text('Reset All Answers'),
+          content: const Text(
               'Are you sure you want to reset all selected answers for this poll?'),
           actions: <Widget>[
             TextButton(
@@ -405,13 +405,13 @@ class _QuestionListPageState extends State<QuestionListPage> {
                 Navigator.of(context).pop();
                 _unchooseAll(questionState);
               },
-              child: Text('Yes'),
+              child: const Text('Yes'),
             ),
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('No'),
+              child: const Text('No'),
             ),
           ],
         );
@@ -491,14 +491,14 @@ class _QuestionListPageState extends State<QuestionListPage> {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Text('Already Voted'),
-              content: Text('You have already voted in this poll.'),
+              title: const Text('Already Voted'),
+              content: const Text('You have already voted in this poll.'),
               actions: <Widget>[
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: Text('OK'),
+                  child: const Text('OK'),
                 ),
               ],
             );

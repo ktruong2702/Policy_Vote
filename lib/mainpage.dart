@@ -1,5 +1,5 @@
 import 'package:bai3/model/my_user.dart';
-import 'package:bai3/page/defulatwidget.dart';
+import 'package:bai3/page/defaultwidget.dart';
 import 'package:bai3/page/detail.dart';
 import 'package:bai3/page/home.dart';
 import 'package:bai3/page/polls.dart';
@@ -29,11 +29,11 @@ class _MainpageState extends State<Mainpage> {
     switch (index) {
       case 0:
         {
-          return PollHomePage();
+          return const PollHomePage();
         }
       case 1:
         {
-          return  HomePage(user: widget.user);
+          return HomePage(user: widget.user);
         }
       case 2:
         {
@@ -42,8 +42,9 @@ class _MainpageState extends State<Mainpage> {
       case 3:
         {
           return UserDetailPage(
-              user: widget
-                  .user, uid: widget.user.uid); // Sử dụng widget.user để truy cập vào đối tượng người dùng được truyền từ Mainpage
+              user: widget.user,
+              uid: widget.user
+                  .uid); // Sử dụng widget.user để truy cập vào đối tượng người dùng được truyền từ Mainpage
         }
       default:
         return const DefaultWidget(title: "None");
@@ -74,7 +75,7 @@ class _MainpageState extends State<Mainpage> {
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.purple[800],
-        unselectedItemColor: Color.fromARGB(255, 170, 159, 218),
+        unselectedItemColor: const Color.fromARGB(255, 170, 159, 218),
         onTap: _onItemTapped,
       ),
       body: _loadWidget(_selectedIndex),

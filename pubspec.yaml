@@ -2,7 +2,7 @@ name: bai3
 description: "Policy Vote."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -19,7 +19,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-    sdk: '>3.0.0'
+  sdk: ">3.0.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -36,13 +36,14 @@ dependencies:
   cupertino_icons: ^1.0.2
   firebase_core: ^2.28.0
   cloud_firestore: ^4.16.0
-  
 
   http: any
   firebase_auth: ^4.19.0
   charts_flutter: ^0.12.0
   font_awesome_flutter: ^10.7.0
   provider: ^6.1.2
+  intl: any
+  dart_code_metrics: ^4.19.2
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -58,17 +59,17 @@ dev_dependencies:
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter packages.
-flutter: 
+flutter:
   uses-material-design: true
-  assets: 
+  assets:
     - assets/images/policyvotelogo.jpg
-  fonts: 
+  fonts:
     # - family: Comfortaa
-    #   fonts: 
+    #   fonts:
     #     - asset: assets/fonts/ComfortaaRegular.ttf
     #       weight: 400
     - family: Roboto
-      fonts: 
+      fonts:
         - asset: assets/fonts/Roboto-Black.ttf
           weight: 900
         - asset: assets/fonts/Roboto-Regular.ttf

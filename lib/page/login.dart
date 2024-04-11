@@ -139,7 +139,7 @@ class _LoginFormState extends State<LoginForm> {
               onPressed: _login,
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all<Color>
-                    (Color.fromARGB(255, 155, 133, 255)!,),
+                    (const Color.fromARGB(255, 155, 133, 255),),
                 foregroundColor:
                     MaterialStateProperty.all<Color>
                     (Colors.white),

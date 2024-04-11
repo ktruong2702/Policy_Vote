@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
 class PollHomePage extends StatelessWidget {
+  const PollHomePage({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
      
       body: Padding(
         padding: EdgeInsets.all(16.0),
@@ -36,6 +38,8 @@ class PollHomePage extends StatelessWidget {
 }
 
 class PollResultsChart extends StatelessWidget {
+  const PollResultsChart({super.key});
+
   @override
   Widget build(BuildContext context) {
     // Định nghĩa dữ liệu cho biểu đồ (đây là dữ liệu giả định)
@@ -66,6 +70,8 @@ class PollResultsChart extends StatelessWidget {
 }
 
 class ArticleLinks extends StatelessWidget {
+  const ArticleLinks({super.key});
+
   @override
   Widget build(BuildContext context) {
     // Thay thế dữ liệu này bằng dữ liệu thực tế của bạn
@@ -108,7 +114,7 @@ class ClicksPerArticle {
 class ArticleDetailPage extends StatelessWidget {
   final String article;
 
-  const ArticleDetailPage({required this.article});
+  const ArticleDetailPage({super.key, required this.article});
 
   @override
   Widget build(BuildContext context) {

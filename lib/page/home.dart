@@ -50,10 +50,10 @@ class PollAnswerResult extends StatelessWidget {
             );
           }
 
-          // Tạo một danh sách để nhóm các cuộc thăm dò theo poll_id
+          // Create a list to group surveys by poll_id
           Map<String, List<Map<String, dynamic>>> groupedPolls = {};
 
-          // Nhóm các cuộc thăm dò theo poll_id
+          // Group surveys by poll_id
           answeredPolls.forEach((answeredPoll) {
             var pollId = answeredPoll['poll_id'];
             var questionId = answeredPoll['question_id'];
@@ -166,14 +166,14 @@ class PollAnswerResult extends StatelessWidget {
   }
 }
 
-// Hàm để lấy tiêu đề của cuộc thăm dò từ Firestore
+// Function to retrieve survey title from Firestore
 Future<String> _getPollTitle(String pollId) async {
   var pollQuery =
       await FirebaseFirestore.instance.collection('polls').doc(pollId).get();
   return pollQuery['title'];
 }
 
-// Hàm để lấy nội dung của câu hỏi từ Firestore
+// Function to retrieve question content from Firestore
 Future<String> _getQuestionText(String questionId) async {
   var questionQuery = await FirebaseFirestore.instance
       .collection('questions')

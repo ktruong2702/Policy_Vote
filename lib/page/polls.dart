@@ -27,7 +27,6 @@ class _HomePageState extends State<HomePage> {
           .where('poll_id', isEqualTo: pollId)
           .get();
 
-      // Kiểm tra xem có bản ghi phản hồi từ cơ sở dữ liệu hay không
       return userAnswers.docs.isNotEmpty;
     } catch (e) {
       print('Error checking user vote: $e');
@@ -37,7 +36,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    const userId = 'user_id'; // Thay đổi bằng user id thực tế
+    const userId = 'user_id'; 
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -70,12 +69,11 @@ class _HomePageState extends State<HomePage> {
                 return Text('Error: ${snapshot.error}');
               }
               List<QueryDocumentSnapshot> allQuestions =
-                  snapshot.data!.docs; // All available polls
+                  snapshot.data!.docs;
               List<QueryDocumentSnapshot> visibleQuestions = showAllQuestions
                   ? allQuestions
                   : allQuestions.take(10).toList();
 
-              // Hiển thị danh sách
               return ListView(
                 padding: const EdgeInsets.all(8.0),
                 children: [
@@ -87,7 +85,6 @@ class _HomePageState extends State<HomePage> {
                     if (expiredTime != null && expiredTime is Timestamp) {
                       final now = Timestamp.now();
                       if (now.compareTo(expiredTime) >= 0) {
-                        // Bỏ qua bài khảo sát đã hết hạn
                         return const SizedBox.shrink();
                       }
                     }
@@ -96,7 +93,6 @@ class _HomePageState extends State<HomePage> {
                         final hasVoted =
                             await hasUserVoted(widget.user, pollId);
                         if (hasVoted) {
-                          // Hiển thị thông báo rằng người dùng đã bỏ phiếu cho cuộc khảo sát này rồi
                           showDialog(
                             context: context,
                             builder: (context) => AlertDialog(
@@ -130,12 +126,12 @@ class _HomePageState extends State<HomePage> {
                           borderRadius: BorderRadius.circular(15.0),
                         ),
                         child: ListTile(
-                          key: UniqueKey(), // Thêm key vào ListTile
+                          key: UniqueKey(), 
                           title: Text(
                             pollData['title'],
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
-                              color: Colors.black, // Loại bỏ màu đỏ nếu có khóa
+                              color: Colors.black, 
                             ),
                           ),
                           subtitle: Text(
@@ -147,7 +143,7 @@ class _HomePageState extends State<HomePage> {
                     );
                   }),
                   if (allQuestions.length > 5 &&
-                      !showAllQuestions) // Show the "Show All" button only if there are more than 5 polls and showAllQuestions is false
+                      !showAllQuestions)
                     TextButton(
                       onPressed: () {
                         setState(() {
@@ -156,7 +152,7 @@ class _HomePageState extends State<HomePage> {
                       },
                       child: const Text('Show All Polls'),
                     ),
-                  if (showAllQuestions) // Show the "Show Less" button if showAllQuestions is true
+                  if (showAllQuestions)
                     TextButton(
                       onPressed: () {
                         setState(() {
@@ -488,7 +484,6 @@ class _QuestionListPageState extends State<QuestionListPage> {
         .get()
         .then((QuerySnapshot querySnapshot) {
       if (querySnapshot.size > 0) {
-        // Nếu người dùng đã vote cho poll này rồi, hiển thị thông báo
         showDialog(
           context: context,
           builder: (BuildContext context) {

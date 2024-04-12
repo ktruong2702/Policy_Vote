@@ -67,14 +67,14 @@ class SplashScreen extends StatelessWidget {
 
             ElevatedButton(
               onPressed: () {
-                // Navigator để điều hướng tới trang RegisterPage
+                
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const Register()),
                 );
               },
               style: ButtonStyle(
-                // Đặt padding để làm cho nút rộng và dài ra
+                
                 padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
                   const EdgeInsets.symmetric(horizontal: 100.0, vertical: 16.0),
                 ),
@@ -87,14 +87,14 @@ class SplashScreen extends StatelessWidget {
 
             //   ElevatedButton(
             //   onPressed: () {
-            //     // Navigator để điều hướng tới trang RegisterPage
+            //   
             //     Navigator.push(
             //       context,
             //       MaterialPageRoute(builder: (context) => const Mainpage(user: user)),
             //     );
             //   },
             //   style: ButtonStyle(
-            //     // Đặt padding để làm cho nút rộng và dài ra
+            //     
             //     padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
             //       const EdgeInsets.symmetric(horizontal: 100.0, vertical: 16.0),
             //     ),

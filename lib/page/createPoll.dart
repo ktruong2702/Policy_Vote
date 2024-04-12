@@ -19,7 +19,7 @@ class _CreatePollPageState extends State<CreatePollPage> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            // Xử lý sự kiện khi người dùng nhấn nút back
+            // Handle event when the user presses the back button
             Navigator.pop(context);
           },
         ),
@@ -39,7 +39,7 @@ class _CreatePollPageState extends State<CreatePollPage> {
             ),
             const TextField(
               decoration: InputDecoration(
-                labelText: 'Question', // Nhập nội dung câu hỏi
+                labelText: 'Question',
               ),
             ),
             const SizedBox(height: 16),

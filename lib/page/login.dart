@@ -9,7 +9,6 @@ class LoginForm extends StatefulWidget {
   const LoginForm({Key? key}) : super(key: key);
 
   @override
-  // ignore: library_private_types_in_public_api
   _LoginFormState createState() => _LoginFormState();
 }
 
@@ -26,7 +25,6 @@ class _LoginFormState extends State<LoginForm> {
         email: email,
         password: password,
       );
-      // Truy xuất thông tin người dùng từ Firestore
       DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
           .collection('users')
           .doc(userCredential.user!.uid)
@@ -39,13 +37,11 @@ class _LoginFormState extends State<LoginForm> {
         password: userSnapshot['password'],
         uid: userCredential.user!.uid,
       );
-      // Chuyển sang trang Mainpage và truyền thông tin người dùng
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => Mainpage(user: user)),
       );
     } catch (e) {
-      // Xử lý khi đăng nhập thất bại
       showDialog(
         context: context,
         builder: (context) => AlertDialog(

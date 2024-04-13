@@ -2,6 +2,8 @@ import 'package:bai3/page/login.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:bai3/model/my_user.dart';
+import 'package:bai3/mainpage.dart';
 
 class Register extends StatefulWidget {
   const Register({Key? key}) : super(key: key);
@@ -30,14 +32,16 @@ class _RegisterState extends State<Register> {
         return;
       }
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection('users')
-        .where('username', isEqualTo: _usernameController.text)
-        .get();
+          .collection('users')
+          .where('username', isEqualTo: _usernameController.text)
+          .get();
 
       if (querySnapshot.docs.isNotEmpty) {
         // Show error message if username already exists
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('The username is already in use by another account')),
+          const SnackBar(
+              content:
+                  Text('The username is already in use by another account')),
         );
         return;
       }
@@ -48,21 +52,18 @@ class _RegisterState extends State<Register> {
         password: _passwordController.text,
       );
 
-      // Save user data to Firestore
+      // Save user data to Firestore including the role field
       await FirebaseFirestore.instance
           .collection('users')
           .doc(userCredential.user!.uid)
           .set({
         'email': _emailController.text,
-        'f_name': _f_nameController.text
-            .split(" ")
-            .first, // Assuming first part is first name
-        'l_name': _l_nameController.text
-            .split(" ")
-            .last, // Assuming last part is last name
+        'f_name': _f_nameController.text.split(" ").first,
+        'l_name': _l_nameController.text.split(" ").last,
         'reg': Timestamp.now(),
         'password': _passwordController.text,
         'username': _usernameController.text,
+        'role': 'user', // Set role field to 'user'
       });
 
       // Show success notification
@@ -91,7 +92,8 @@ class _RegisterState extends State<Register> {
         backgroundColor: Colors.white,
       ),
       body: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 16, 16, 100), //shifting all upward
+        padding:
+            const EdgeInsets.fromLTRB(16, 16, 16, 100), //shifting all upward
         child: Center(
           child: SingleChildScrollView(
             child: DefaultTextStyle(
@@ -170,28 +172,23 @@ class _RegisterState extends State<Register> {
                       ElevatedButton(
                         onPressed: _register,
                         style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>
-                              (const Color.fromARGB(255, 150, 136, 214),),
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                            const Color.fromARGB(255, 150, 136, 214),
+                          ),
                           foregroundColor:
-                              MaterialStateProperty.all<Color>
-                              (Colors.white),
+                              MaterialStateProperty.all<Color>(Colors.white),
                         ),
                         child: const Text('Register'),
                       ),
                       const SizedBox(width: 16),
                       ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const LoginForm()));
-                        },
+                        onPressed: _login,
                         style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>
-                              (const Color.fromARGB(255, 155, 133, 255),),
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                            const Color.fromARGB(255, 155, 133, 255),
+                          ),
                           foregroundColor:
-                              MaterialStateProperty.all<Color>
-                              (Colors.white),
+                              MaterialStateProperty.all<Color>(Colors.white),
                         ),
                         child: const Text(' Login '),
                       ),
@@ -214,5 +211,51 @@ class _RegisterState extends State<Register> {
     _passwordController.dispose();
     _confirmPasswordController.dispose();
     super.dispose();
+  }
+
+  void _login() async {
+    String email = _emailController.text;
+    String password = _passwordController.text;
+    try {
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userCredential.user!.uid)
+          .get();
+      MyUser user = MyUser(
+        email: userSnapshot['email'],
+        f_name: userSnapshot['f_name'],
+        l_name: userSnapshot['l_name'],
+        username: userSnapshot['username'],
+        password: userSnapshot['password'],
+        uid: userCredential.user!.uid,
+        role: userSnapshot['role'],
+      );
+      // Navigate to main page
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => Mainpage(user: user)),
+      );
+    } catch (e) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Login Failed'),
+          content: const Text(
+              'Your email or password is incorrect. Please try again.'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+    }
   }
 }

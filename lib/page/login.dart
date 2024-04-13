@@ -1,5 +1,6 @@
 import 'package:bai3/mainpage.dart';
 import 'package:bai3/model/my_user.dart';
+import 'package:bai3/page/admin/mainpageAdmin.dart';
 import 'package:bai3/page/splashscreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -15,6 +16,66 @@ class LoginForm extends StatefulWidget {
 class _LoginFormState extends State<LoginForm> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  void _forgotPassword() async {
+    String email = _emailController.text;
+    try {
+      // Check if the entered email exists in the Firestore collection
+      QuerySnapshot userSnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .where('email', isEqualTo: email)
+          .get();
+      if (userSnapshot.docs.isNotEmpty) {
+        // If the email exists, send a password reset email using Firebase Auth
+        await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Reset Password Email Sent'),
+            content: const Text(
+                'An email with instructions to reset your password has been sent to your email address.'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
+      } else {
+        // If the email does not exist, show an error dialog
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Email Not Found'),
+            content: const Text('This email address is not registered.'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
+      }
+    } catch (e) {
+      print('Error sending password reset email: $e');
+      // Handle any errors that occur during the process
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Error'),
+          content: const Text(
+              'An error occurred while processing your request. Please try again later.'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+    }
+  }
 
   void _login() async {
     String email = _emailController.text;
@@ -25,6 +86,9 @@ class _LoginFormState extends State<LoginForm> {
         email: email,
         password: password,
       );
+
+      await _updatePasswordInFirestore(userCredential.user!.uid, password);
+
       DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
           .collection('users')
           .doc(userCredential.user!.uid)
@@ -36,11 +100,21 @@ class _LoginFormState extends State<LoginForm> {
         username: userSnapshot['username'],
         password: userSnapshot['password'],
         uid: userCredential.user!.uid,
+        role: userSnapshot['role'],
       );
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => Mainpage(user: user)),
-      );
+      if (user.role == 'admin') {
+        // Navigate to admin layout
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => MainpageAdmin(user: user)),
+        );
+      } else {
+        // Navigate to main page
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => Mainpage(user: user)),
+        );
+      }
     } catch (e) {
       showDialog(
         context: context,
@@ -56,6 +130,20 @@ class _LoginFormState extends State<LoginForm> {
           ],
         ),
       );
+    }
+  }
+
+  Future<void> _updatePasswordInFirestore(
+      String uid, String newPassword) async {
+    try {
+      // Update the 'password' field in the user's Firestore document
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .update({'password': newPassword});
+    } catch (e) {
+      print('Error updating password in Firestore: $e');
+      // Handle error updating password in Firestore...
     }
   }
 
@@ -76,7 +164,7 @@ class _LoginFormState extends State<LoginForm> {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.fromLTRB(16,150,16,16),
+        padding: const EdgeInsets.fromLTRB(16, 150, 16, 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -134,13 +222,17 @@ class _LoginFormState extends State<LoginForm> {
             ElevatedButton(
               onPressed: _login,
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>
-                    (const Color.fromARGB(255, 155, 133, 255),),
-                foregroundColor:
-                    MaterialStateProperty.all<Color>
-                    (Colors.white),
+                backgroundColor: MaterialStateProperty.all<Color>(
+                  const Color.fromARGB(255, 155, 133, 255),
+                ),
+                foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
               ),
               child: const Text(' Login '),
+            ),
+            const SizedBox(height: 10.0),
+            TextButton(
+              onPressed: _forgotPassword,
+              child: const Text('Forgot password?'),
             ),
           ],
         ),

@@ -1,5 +1,7 @@
+import 'package:bai3/page/CreatorPoll/mainpageCreator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:bai3/model/my_user.dart';
 
 class AddPollPage extends StatefulWidget {
   @override
@@ -24,52 +26,82 @@ class _AddPollPageState extends State<AddPollPage> {
     });
   }
 
-  void _createPoll() async {
+  void _createQuestions() async {
+    if (titleController.text.isEmpty ||
+        descriptionController.text.isEmpty ||
+        selectedExpiryDate == null ||
+        questions.isEmpty) {
+      // Show an error message on the UI
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please fill out all required fields.'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
+
     try {
-      // Tạo một bản ghi mới trong bộ sưu tập polls
+      // Create a new record in the 'polls' collection
       var pollDoc = await FirebaseFirestore.instance.collection('polls').add({
         'title': titleController.text,
         'description': descriptionController.text,
         'expired_time': selectedExpiryDate,
       });
 
-      print('Poll created successfully');
+      for (var question in questions) {
+        if (question.isNotEmpty) {
+          // Add each question to the 'questions' collection under the poll
+          var questionDoc =
+              await FirebaseFirestore.instance.collection('questions').add({
+            'poll_id': pollDoc.id,
+            'question_txt': question,
+          });
 
-      // Hiển thị nút để thêm câu hỏi sau khi poll đã được tạo thành công
-      setState(() {
-        _showAddQuestionButton = true;
-      });
-    } catch (error) {
-      print('Error creating poll: $error');
-    }
-  }
-
-  bool _showAddQuestionButton = false;
-
-  void _createQuestions() async {
-  try {
-    // Tạo một bản ghi mới trong bộ sưu tập polls
-    var pollDoc = await FirebaseFirestore.instance.collection('polls').add({
-      'title': titleController.text,
-      'description': descriptionController.text,
-      'expired_time': selectedExpiryDate,
-    });
-
-    for (var question in questions) {
-      if (question.isNotEmpty) {
-        // Thêm mỗi câu hỏi vào bộ sưu tập questions cùng cấp với bộ sưu tập polls
-        var questionDoc = await FirebaseFirestore.instance.collection('questions').add({
-          'poll_id': pollDoc.id,
-          'question_txt': question,
-        });
-
-        print('Question ${questionDoc.id} added to poll ${pollDoc.id}');
+          print('Question ${questionDoc.id} added to poll ${pollDoc.id}');
+        }
       }
+
+      // Show a success message on the UI
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Poll successfully created.'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+
+      // Clear the form after successful creation
+      titleController.clear();
+      descriptionController.clear();
+      selectedExpiryDate = null;
+      questions.clear();
+
+      // Create an instance of MyUser
+      MyUser user = MyUser(
+        email: 'example@example.com',
+        f_name: 'First',
+        l_name: 'Last',
+        username: 'username',
+        password: 'password',
+        role: 'user',
+        uid: '12345', // Initialize with your actual uid
+      );
+
+      // Navigate to the MainpageCreator with the user object
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => MainpageCreator(user: user)),
+      );
+    } catch (error) {
+      // Show an error message on the UI
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error creating poll: $error'),
+          duration: const Duration(seconds: 2),
+        ),
+      );
     }
-  } catch (error) {
-    print('Error creating poll: $error');
   }
-}
 
   Future<void> _selectExpiryDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -89,26 +121,58 @@ class _AddPollPageState extends State<AddPollPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Poll'),
+        automaticallyImplyLeading: false,
+        centerTitle: true,
+        title: const Text(
+          'Create Poll',
+          style: TextStyle(
+              color: Colors.white,
+              fontSize: 20.0,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'PTSerif'),
+        ),
+        backgroundColor: const Color.fromARGB(255, 101, 83, 182),
+        elevation: 0,
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const SizedBox(height: 16.0),
+            const Text(
+              'Poll Title',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0, fontFamily: 'PTSerif'),
+            ),
             TextField(
               controller: titleController,
-              decoration: InputDecoration(labelText: 'Poll Title'),
+              decoration: const InputDecoration(
+                hintText: 'Enter poll title',
+                labelStyle: TextStyle(fontFamily: 'PTSerif'),
+                border: OutlineInputBorder(),
+              ),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
+            const Text(
+              'Poll Description',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0, fontFamily: 'PTSerif'),
+            ),
             TextField(
               controller: descriptionController,
-              decoration: InputDecoration(labelText: 'Poll Description'),
+              maxLines: 3,
+              decoration: const InputDecoration(
+                hintText: 'Enter poll description',
+                labelStyle: TextStyle(fontFamily: 'PTSerif'),
+                border: OutlineInputBorder(),
+              ),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             Row(
               children: [
-                Text('Expiry Date: '),
+                const Text(
+                  'Expiry Date: ',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0, fontFamily: 'PTSerif'),
+                ),
                 InkWell(
                   onTap: () {
                     _selectExpiryDate(context);
@@ -120,44 +184,71 @@ class _AddPollPageState extends State<AddPollPage> {
                     style: TextStyle(
                       color: Theme.of(context).primaryColor,
                       fontWeight: FontWeight.bold,
+                      fontFamily: 'PTSerif',
+                      fontSize: 16.0,
                     ),
                   ),
                 ),
               ],
             ),
-            SizedBox(height: 16.0),
-            Text('Questions:'),
-            ...questions.asMap().entries.map((entry) {
-              int index = entry.key;
-              return Padding(
-                padding: EdgeInsets.symmetric(vertical: 8.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        onChanged: (value) {
-                          _updateQuestion(index, value);
-                        },
-                        decoration:
-                            InputDecoration(labelText: 'Question ${index + 1}'),
+            const SizedBox(height: 16.0),
+            const Text(
+              'Questions:',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0, fontFamily: 'PTSerif'),
+            ),
+            Column(
+              children: questions.asMap().entries.map((entry) {
+                int index = entry.key;
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          onChanged: (value) {
+                            _updateQuestion(index, value);
+                          },
+                          decoration: InputDecoration(
+                            labelText: 'Question ${index + 1}',
+                            labelStyle: const TextStyle(fontFamily: 'PTSerif'),
+                            border: const OutlineInputBorder(),
+                          ),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              );
-            }).toList(),
-            SizedBox(height: 16.0),
+                    ],
+                  ),
+                );
+              }).toList(),
+            ),
+            const SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: _addQuestion,
-              child: Text('Add Question'),
+              style: ButtonStyle(
+                padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                  const EdgeInsets.symmetric(horizontal: 100.0, vertical: 16.0),
+                ),
+                backgroundColor: MaterialStateProperty.all<Color>(
+                  const Color.fromARGB(171, 170, 159, 218),
+                ),
+                foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+              ),
+              child: const Text('Add Question'),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             ElevatedButton(
-              onPressed:
-                  _showAddQuestionButton ? _createQuestions : _createPoll,
-              child: Text(
-                  _showAddQuestionButton ? 'Create Questions' : 'Create Poll'),
+              onPressed: _createQuestions,
+              style: ButtonStyle(
+                padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                  const EdgeInsets.symmetric(horizontal: 100.0, vertical: 16.0),
+                ),
+                backgroundColor: MaterialStateProperty.all<Color>(
+                  const Color.fromARGB(171, 170, 159, 218),
+                ),
+                foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+              ),
+              child: const Text('  Create Poll   '),
             ),
+            const SizedBox(height: 16.0),
           ],
         ),
       ),

@@ -1,5 +1,6 @@
 import 'package:bai3/mainpage.dart';
 import 'package:bai3/model/my_user.dart';
+import 'package:bai3/page/CreatorPoll/mainpageCreator.dart';
 import 'package:bai3/page/admin/mainpageAdmin.dart';
 import 'package:bai3/page/splashscreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -107,6 +108,12 @@ class _LoginFormState extends State<LoginForm> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => MainpageAdmin(user: user)),
+        );
+      } else if (user.role == 'policymaker') {
+        // Navigate to policymaker layout
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => MainpageCreator(user: user)),
         );
       } else {
         // Navigate to main page

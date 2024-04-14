@@ -1,9 +1,8 @@
 import 'package:bai3/model/my_user.dart';
+import 'package:bai3/page/CreatorPoll/createpolls.dart';
+import 'package:bai3/page/CreatorPoll/detail.dart';
 import 'package:bai3/page/defaultwidget.dart';
 import 'package:bai3/page/detail.dart';
-import 'package:bai3/page/home.dart';
-import 'package:bai3/page/polls.dart';
-import 'package:bai3/page/recentPoll.dart';
 import 'package:flutter/material.dart';
 
 class MainpageCreator extends StatefulWidget {
@@ -30,18 +29,14 @@ class _MainpageState extends State<MainpageCreator> {
       case 0:
         {
 
-          return PollAnswerResult(userId: widget.user.uid );
+          return UpdatePollPage();
 
         }
       case 1:
         {
-          return HomePage(user: widget.user);
-        }
+          return AddPollPage();
+        }  
       case 2:
-        {
-          return const RecentPollPage();
-        }
-      case 3:
         {
           return UserDetailPage(
               user: widget.user,

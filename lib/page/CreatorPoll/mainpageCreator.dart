@@ -54,12 +54,12 @@ class _MainpageState extends State<MainpageCreator> {
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.auto_graph_outlined),
-            label: 'Results',
+            icon: Icon(Icons.edit),
+            label: 'Edit',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.list),
-            label: 'Polls',
+            icon: Icon(Icons.create_new_folder),
+            label: 'Create',
           ),
             BottomNavigationBarItem(
             icon: Icon(Icons.person),
